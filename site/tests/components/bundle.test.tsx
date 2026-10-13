@@ -1,5 +1,5 @@
 import path from "node:path";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { BundleChecklist } from "@/components/bundle/BundleChecklist";
@@ -11,7 +11,7 @@ import { t } from "@/lib/i18n";
 
 let search = "";
 vi.mock("next/navigation", () => ({
-  useSearchParams: () => new URLSearchParams(search),
+  useSearchParams: () => new URLSearchParams(window.location.search || search),
   usePathname: () => "/bundle/",
 }));
 
@@ -39,6 +39,7 @@ function renderBundle() {
 
 beforeEach(() => {
   search = "";
+  window.history.replaceState(null, "", "/bundle/");
   localStorage.clear();
   window.history.replaceState(null, "", "/bundle/");
 });
@@ -57,7 +58,7 @@ describe("bundle", () => {
 
   it("URL wins, notices unknown names, and does not overwrite storage until save", async () => {
     const user = userEvent.setup();
-    search = "plugins=sdd-engineering,zzz";
+    window.history.replaceState(null, "", "/bundle/?plugins=sdd-engineering,zzz");
     localStorage.setItem(KEY, JSON.stringify(["agent-harness"]));
     renderBundle();
     const settings = await screen.findByTestId("bundle-settings");
@@ -75,9 +76,50 @@ describe("bundle", () => {
     expect(await screen.findByTestId("bundle-settings")).toBeInTheDocument();
   });
 
-  it("empty bundle shows the hint and no snippet", () => {
+  it("empty bundle shows the hint and no snippet", async () => {
     const { container } = renderBundle();
-    expect(screen.getByText(t("bundle.empty"))).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText(t("bundle.empty"))).toBeInTheDocument());
     expect(container.querySelector("pre")).toBeNull();
+  });
+
+  it("an edit after opening a shared URL keeps edits and clears fromUrl", async () => {
+    const user = userEvent.setup();
+    window.history.replaceState(null, "", "/bundle/?plugins=sdd-engineering");
+    localStorage.setItem(KEY, JSON.stringify(["agent-harness"]));
+    renderBundle();
+    const saveLabel = t("bundle.save");
+    expect(await screen.findByRole("button", { name: saveLabel })).toBeInTheDocument();
+    await user.click(screen.getByRole("checkbox", { name: "agent-harness" }));
+    await waitFor(() => expect(window.location.search).toContain("agent-harness"));
+    expect(screen.queryByRole("button", { name: saveLabel })).toBeNull();
+    expect(screen.getByRole("checkbox", { name: "agent-harness" })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "sdd-engineering" })).toBeChecked();
+    expect(JSON.parse(localStorage.getItem(KEY)!)).toEqual(["agent-harness", "sdd-engineering"]);
+  });
+
+  it("removing the last plugin does not re-read storage", async () => {
+    const user = userEvent.setup();
+    window.history.replaceState(null, "", "/bundle/?plugins=sdd-engineering");
+    localStorage.setItem(KEY, JSON.stringify(["agent-harness"]));
+    renderBundle();
+    await user.click(await screen.findByRole("checkbox", { name: "sdd-engineering" }));
+    expect(screen.getByRole("checkbox", { name: "agent-harness" })).not.toBeChecked();
+    expect(screen.getByText(t("bundle.empty"))).toBeInTheDocument();
+  });
+
+  it("save clears fromUrl and writes storage", async () => {
+    const user = userEvent.setup();
+    window.history.replaceState(null, "", "/bundle/?plugins=sdd-engineering");
+    renderBundle();
+    const saveLabel = t("bundle.save");
+    await user.click(await screen.findByRole("button", { name: saveLabel }));
+    expect(screen.queryByRole("button", { name: saveLabel })).toBeNull();
+    expect(JSON.parse(localStorage.getItem(KEY)!)).toEqual(["sdd-engineering"]);
+  });
+
+  it("malformed stored JSON gives an empty bundle", async () => {
+    localStorage.setItem(KEY, "{not json");
+    renderBundle();
+    await waitFor(() => expect(screen.getByText(t("bundle.empty"))).toBeInTheDocument());
   });
 });

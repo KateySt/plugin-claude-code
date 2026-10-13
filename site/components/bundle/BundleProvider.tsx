@@ -7,6 +7,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -63,9 +64,11 @@ interface InitState {
 function UrlInit({
   known,
   onInit,
+  written,
 }: {
   known: string[];
   onInit: (state: InitState) => void;
+  written: { current: string | null | undefined };
 }) {
   const params = useSearchParams();
   const pathname = usePathname();
@@ -73,6 +76,8 @@ function UrlInit({
   const onBundlePage = pathname.replace(/\/+$/, "").endsWith("/bundle");
 
   useEffect(() => {
+    // The URL change was written by toggle; local state is already current.
+    if (onBundlePage && param === written.current) return;
     if (onBundlePage && param !== null) {
       const { plugins, unknown } = parseBundleParam(param, known);
       onInit({ plugins, fromUrl: true, unknown, onBundlePage });
@@ -84,7 +89,7 @@ function UrlInit({
         onBundlePage,
       });
     }
-  }, [onBundlePage, param, known, onInit]);
+  }, [onBundlePage, param, known, onInit, written]);
 
   return null;
 }
@@ -102,26 +107,30 @@ export function BundleProvider({
     unknown: [],
     onBundlePage: false,
   });
+  const written = useRef<string | null | undefined>(undefined);
   const known = useMemo(() => source.plugins.map((p) => p.name), [source]);
 
   const commit = useCallback((plugins: string[], onBundlePage: boolean) => {
     writeStorage(plugins);
     if (onBundlePage) {
       const query = serializeBundleParam(plugins);
-      const url = query ? `${window.location.pathname}?plugins=${query}` : window.location.pathname;
+      written.current = query;
+      const url = `${window.location.pathname}?plugins=${query}`;
       window.history.replaceState(window.history.state, "", url);
     }
   }, []);
 
   const toggle = useCallback(
     (name: string) => {
-      const next = state.plugins.includes(name)
-        ? state.plugins.filter((n) => n !== name)
-        : [...state.plugins, name].sort();
-      commit(next, state.onBundlePage);
-      setState({ ...state, plugins: next, fromUrl: false, unknown: state.unknown });
+      setState((s) => {
+        const plugins = s.plugins.includes(name)
+          ? s.plugins.filter((n) => n !== name)
+          : [...s.plugins, name].sort();
+        commit(plugins, s.onBundlePage);
+        return { ...s, plugins, fromUrl: false };
+      });
     },
-    [state, commit],
+    [commit],
   );
 
   const save = useCallback(() => {
@@ -145,7 +154,7 @@ export function BundleProvider({
   return (
     <BundleContext value={value}>
       <Suspense fallback={null}>
-        <UrlInit known={known} onInit={setState} />
+        <UrlInit known={known} onInit={setState} written={written} />
       </Suspense>
       {children}
     </BundleContext>
