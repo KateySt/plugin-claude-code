@@ -14,7 +14,9 @@
     "addMarketplace": "Add the marketplace",
     "installPlugin": "Install the plugin",
     "copy": "Copy",
-    "copied": "Copied"
+    "copied": "Copied",
+    "tabCli": "Terminal",
+    "tabSession": "In session"
   },
   "bundle": {
     "heading": "Bundle",
@@ -28,7 +30,17 @@
     "plugins": "Plugins",
     "skills": "Skills",
     "agents": "Agents",
-    "version": "Version {version}"
+    "version": "Version {version}",
+    "badge": {
+      "plugin": "Plugin",
+      "skill": "Skill",
+      "agent": "Agent",
+      "command": "Command",
+      "hook": "Hook",
+      "mcp": "MCP server",
+      "reference": "Reference",
+      "manual": "Manual"
+    }
   },
   "artifact": {
     "description": "Description",
