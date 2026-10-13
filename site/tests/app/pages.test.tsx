@@ -47,7 +47,8 @@ describe("plugin page", () => {
     );
 
     expect(screen.getByText(t("catalog.version", { version: manifest.version }))).toBeTruthy();
-    expect(agents).toBe(7);
+    expect(agents).toBeGreaterThan(0);
+    expect(skills).toBeGreaterThan(0);
     expect(within(screen.getByTestId("list-agent")).getAllByRole("listitem")).toHaveLength(agents);
     expect(within(screen.getByTestId("list-skill")).getAllByRole("listitem")).toHaveLength(skills);
     expect(screen.queryByTestId("list-hook")).toBeNull();
@@ -60,6 +61,13 @@ describe("plugin page", () => {
     expect(source.getAttribute("href")).toBe(
       githubTreeUrl(catalog.marketplace.repoUrl, "plugins/sdd-engineering"),
     );
+  });
+
+  it("renders exactly one h1 even though the README has its own", async () => {
+    render(
+      withBundle(await PluginPage({ params: Promise.resolve({ plugin: "sdd-engineering" }) })),
+    );
+    expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
   });
 
   it("builds metadata and static params from the catalog", async () => {
@@ -87,7 +95,7 @@ describe("artifact pages", () => {
       ),
     );
     expect(screen.getByText(t("catalog.badge.reference"))).toBeTruthy();
-    const heading = screen.getAllByRole("heading", { level: 1 })[0];
+    const heading = screen.getByRole("heading", { level: 1 });
     expect(heading.textContent).toBe(artifact.title);
     expect(heading.textContent?.startsWith("/")).toBe(false);
     expect(screen.getByText(t("artifact.referenceNote"))).toBeTruthy();

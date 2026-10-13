@@ -1,7 +1,18 @@
+import type { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import remarkGfm from "remark-gfm";
 import { rewriteRelativeLink } from "@/lib/markdown/links";
+
+const HEADING_LEVELS = [1, 2, 3, 4, 5, 6] as const;
+
+/** Demote each heading one level (h1 -> h2, ... capped at h6) so the page keeps a single h1. */
+const demotedHeadings = Object.fromEntries(
+  HEADING_LEVELS.map((level) => {
+    const Tag = `h${Math.min(level + 1, 6)}` as "h2" | "h3" | "h4" | "h5" | "h6";
+    return [`h${level}`, ({ children }: { children?: ReactNode }) => <Tag>{children}</Tag>];
+  }),
+);
 
 interface MarkdownProps {
   source: string;
@@ -16,6 +27,7 @@ export function Markdown({ source, sourcePath, repoUrl }: MarkdownProps) {
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeHighlight]}
         components={{
+          ...demotedHeadings,
           a: ({ href, children }) => (
             <a href={href ? rewriteRelativeLink(href, sourcePath, repoUrl) : undefined}>
               {children}
