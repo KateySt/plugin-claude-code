@@ -9,11 +9,13 @@ interface SearchBoxProps {
   onChange(value: string): void;
 }
 
+const TEXT_INPUT_TYPES = new Set(["text", "search", "email", "url", "tel", "password", "number"]);
+
 function isTypingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
+  if (target instanceof HTMLInputElement) return TEXT_INPUT_TYPES.has(target.type);
   return (
     target.isContentEditable ||
-    target instanceof HTMLInputElement ||
     target instanceof HTMLTextAreaElement ||
     target instanceof HTMLSelectElement
   );

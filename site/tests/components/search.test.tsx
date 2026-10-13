@@ -24,6 +24,7 @@ function renderSearch() {
     <BundleProvider source={bundleSourceFrom(catalog)}>
       <SearchPage
         plugins={plugins}
+        repo={catalog.marketplace.repo}
         marketplaceName={catalog.marketplace.name}
       />
     </BundleProvider>,
@@ -129,5 +130,38 @@ describe("search page", () => {
     await user.keyboard("{Escape}");
     expect(box).toHaveValue("");
     await act(async () => {});
+  });
+
+  it("copies both CLI lines from a plugin card", async () => {
+    const user = userEvent.setup();
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", { value: { writeText }, configurable: true });
+    renderSearch();
+    await ready();
+    await user.click(screen.getAllByRole("button", { name: t("install.copyInstall") })[0]);
+    expect(writeText).toHaveBeenCalledTimes(1);
+    const lines = String(writeText.mock.calls[0][0]).split("\n");
+    expect(lines).toHaveLength(2);
+    expect(lines[0]).toBe(`claude plugin marketplace add ${catalog.marketplace.repo}`);
+    expect(lines[1]).toMatch(new RegExp(`^claude plugin install [^@\\s]+@${catalog.marketplace.name}$`));
+  });
+
+  it("uses the filtered empty message when only filters are active", async () => {
+    window.history.replaceState(null, "", "/?type=hook&plugin=agent-harness");
+    renderSearch();
+    expect(await screen.findByText(t("search.noResultsFiltered"))).toBeInTheDocument();
+    expect(screen.queryByText(/No results for ""/)).toBeNull();
+  });
+
+  it("focuses the search box on '/' after a type chip was clicked", async () => {
+    const user = userEvent.setup();
+    renderSearch();
+    await ready();
+    const chip = screen.getByRole("checkbox", { name: "Skill" });
+    await user.click(chip);
+    chip.focus();
+    expect(chip).toHaveFocus();
+    await user.keyboard("/");
+    expect(screen.getByRole("searchbox")).toHaveFocus();
   });
 });

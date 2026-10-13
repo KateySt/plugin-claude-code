@@ -8,17 +8,27 @@ import { VersionBadge } from "@/components/catalog/VersionBadge";
 import { CopyButton } from "@/components/install/CopyButton";
 import { Button } from "@/components/ui/button";
 import { t } from "@/lib/i18n";
+import { installCommands } from "@/lib/install/commands";
 import type { SearchDoc } from "@/lib/search/index-docs";
 
 interface SearchResultsProps {
   results: SearchDoc[];
   query: string;
   filtersActive: boolean;
+  repo: string;
   marketplaceName: string;
   onClearFilters(): void;
 }
 
-function ResultCard({ doc, marketplaceName }: { doc: SearchDoc; marketplaceName: string }) {
+function ResultCard({
+  doc,
+  repo,
+  marketplaceName,
+}: {
+  doc: SearchDoc;
+  repo: string;
+  marketplaceName: string;
+}) {
   const isPlugin = doc.type === "plugin";
   return (
     <div data-testid="result" className="contents">
@@ -37,7 +47,7 @@ function ResultCard({ doc, marketplaceName }: { doc: SearchDoc; marketplaceName:
         {isPlugin ? (
           <ArtifactCard.Actions>
             <CopyButton
-              text={`claude plugin install ${doc.plugin}@${marketplaceName}`}
+              text={installCommands(repo, marketplaceName, doc.plugin).cli.join("\n")}
               label="install.copyInstall"
             />
             <BundleToggle name={doc.plugin} />
@@ -52,13 +62,14 @@ export function SearchResults({
   results,
   query,
   filtersActive,
+  repo,
   marketplaceName,
   onClearFilters,
 }: SearchResultsProps) {
   if (results.length === 0) {
     return (
       <div className="flex flex-col items-start gap-2" role="status">
-        <p>{t("search.noResults", { query })}</p>
+        <p>{query ? t("search.noResults", { query }) : t("search.noResultsFiltered")}</p>
         {filtersActive ? (
           <Button type="button" variant="outline" onClick={onClearFilters}>
             {t("search.clearFilters")}
@@ -74,7 +85,7 @@ export function SearchResults({
       </p>
       <ArtifactGrid>
         {results.map((doc) => (
-          <ResultCard key={doc.id} doc={doc} marketplaceName={marketplaceName} />
+          <ResultCard key={doc.id} doc={doc} repo={repo} marketplaceName={marketplaceName} />
         ))}
       </ArtifactGrid>
     </>

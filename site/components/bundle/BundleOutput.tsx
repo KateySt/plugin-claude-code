@@ -37,7 +37,7 @@ export function BundleOutput() {
         </div>
       ) : null}
       <section className="flex flex-col gap-2">
-        <h2>{t("bundle.settingsHeading")}</h2>
+        <h2 className="text-lg font-semibold">{t("bundle.settingsHeading")}</h2>
         <pre data-testid="bundle-settings" className="overflow-x-auto rounded-md border p-3">
           {settings}
         </pre>
@@ -46,7 +46,7 @@ export function BundleOutput() {
         </div>
       </section>
       <section className="flex flex-col gap-2">
-        <h2>{t("bundle.commandsHeading")}</h2>
+        <h2 className="text-lg font-semibold">{t("bundle.commandsHeading")}</h2>
         <pre data-testid="bundle-commands" className="overflow-x-auto rounded-md border p-3">
           {commands}
         </pre>

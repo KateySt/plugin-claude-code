@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ARTIFACT_LIST_SECTIONS, ArtifactList } from "@/components/catalog/ArtifactList";
 import { PluginHeader } from "@/components/catalog/PluginHeader";
 import { InstallBlock } from "@/components/install/InstallBlock";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { PageShell } from "@/components/layout/PageShell";
 import { Markdown } from "@/components/markdown/Markdown";
 import { getCatalog } from "@/lib/catalog";
 import { githubTreeUrl } from "@/lib/catalog/urls";
@@ -36,10 +35,7 @@ export default async function PluginPage({ params }: Props) {
   if (!plugin) notFound();
 
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 p-6">
-      <Link href="/" className="text-sm underline">
-        {t("artifact.backToCatalog")}
-      </Link>
+    <PageShell width="max-w-6xl">
       <PluginHeader plugin={plugin} />
       <InstallBlock repo={marketplace.repo} marketplaceName={marketplace.name} plugin={plugin.name} />
       {ARTIFACT_LIST_SECTIONS.map(({ type, heading }) => (
@@ -67,7 +63,6 @@ export default async function PluginPage({ params }: Props) {
       >
         {t("artifact.viewSource")}
       </a>
-      <SiteFooter repoUrl={marketplace.repoUrl} />
-    </main>
+    </PageShell>
   );
 }

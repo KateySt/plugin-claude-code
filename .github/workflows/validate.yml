@@ -43,3 +43,6 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+        env:
+          PAGES_BASE_PATH: /plugin-claude-code
+      - run: npm run postbuild:check

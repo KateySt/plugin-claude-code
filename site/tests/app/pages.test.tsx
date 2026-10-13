@@ -3,6 +3,7 @@ import path from "node:path";
 import { render, screen, within } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
+import BundlePage, { generateMetadata as bundleMetadata } from "@/app/bundle/page";
 import NotFound from "@/app/not-found";
 import ArtifactPage, {
   generateMetadata as artifactMetadata,
@@ -142,5 +143,24 @@ describe("not found", () => {
     render(<NotFound />);
     expect(screen.getByText(t("notFound.title"))).toBeTruthy();
     expect(screen.getByRole("link", { name: t("notFound.backHome") }).getAttribute("href")).toBe("/");
+  });
+});
+
+describe("bundle page", () => {
+  it("links back to the catalog and shows the footer", () => {
+    render(withBundle(<BundlePage />));
+    expect(
+      screen.getByRole("link", { name: t("artifact.backToCatalog") }).getAttribute("href"),
+    ).toBe("/");
+    expect(screen.getByRole("contentinfo")).toBeTruthy();
+  });
+
+  it("titles the page with the marketplace suffix", () => {
+    expect(bundleMetadata().title).toBe(
+      t("catalog.pageTitle", {
+        title: t("bundle.pageTitle"),
+        marketplace: catalog.marketplace.name,
+      }),
+    );
   });
 });

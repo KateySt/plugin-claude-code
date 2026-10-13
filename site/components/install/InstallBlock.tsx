@@ -3,6 +3,7 @@
 import { CopyButton } from "@/components/install/CopyButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { t } from "@/lib/i18n";
+import { installCommands } from "@/lib/install/commands";
 
 interface InstallBlockProps {
   repo: string;
@@ -22,14 +23,9 @@ function CommandPanel({ id, text }: { id: string; text: string }) {
 }
 
 export function InstallBlock({ repo, marketplaceName, plugin }: InstallBlockProps) {
-  const cli = [
-    `claude plugin marketplace add ${repo}`,
-    `claude plugin install ${plugin}@${marketplaceName}`,
-  ].join("\n");
-  const session = [
-    `/plugin marketplace add ${repo}`,
-    `/plugin install ${plugin}@${marketplaceName}`,
-  ].join("\n");
+  const commands = installCommands(repo, marketplaceName, plugin);
+  const cli = commands.cli.join("\n");
+  const session = commands.session.join("\n");
 
   return (
     <section>

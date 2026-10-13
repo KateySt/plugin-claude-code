@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { ArtifactMeta } from "@/components/catalog/ArtifactMeta";
 import { TypeBadge } from "@/components/catalog/TypeBadge";
 import { InstallBlock } from "@/components/install/InstallBlock";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { PageShell } from "@/components/layout/PageShell";
 import { Markdown } from "@/components/markdown/Markdown";
 import { getCatalog } from "@/lib/catalog";
 import type { Artifact } from "@/lib/catalog/types";
@@ -49,10 +49,7 @@ export default async function ArtifactPage({ params }: Props) {
   if (!plugin) notFound();
 
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-col gap-6 p-6">
-      <Link href="/" className="text-sm underline">
-        {t("artifact.backToCatalog")}
-      </Link>
+    <PageShell>
       <header className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="text-2xl font-semibold">{artifact.title}</h1>
@@ -90,7 +87,6 @@ export default async function ArtifactPage({ params }: Props) {
         {t("artifact.viewSource")}
       </a>
       <InstallBlock repo={marketplace.repo} marketplaceName={marketplace.name} plugin={plugin.name} />
-      <SiteFooter repoUrl={marketplace.repoUrl} />
-    </main>
+    </PageShell>
   );
 }

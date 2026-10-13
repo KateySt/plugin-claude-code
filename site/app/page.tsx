@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { CopyButton } from "@/components/install/CopyButton";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { PageShell } from "@/components/layout/PageShell";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SearchPage } from "@/components/search/SearchPage";
 import { getCatalog } from "@/lib/catalog";
@@ -11,7 +11,7 @@ export default function Home() {
   const command = `claude plugin marketplace add ${marketplace.repo}`;
 
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 p-6">
+    <PageShell width="max-w-6xl" back={false}>
       <SiteHeader
         name={t("site.title")}
         description={t("site.tagline")}
@@ -27,10 +27,10 @@ export default function Home() {
       <Suspense fallback={<p>{t("search.loading")}</p>}>
         <SearchPage
           plugins={plugins.map((p) => p.name)}
+          repo={marketplace.repo}
           marketplaceName={marketplace.name}
         />
       </Suspense>
-      <SiteFooter repoUrl={marketplace.repoUrl} />
-    </main>
+    </PageShell>
   );
 }

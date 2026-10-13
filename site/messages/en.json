@@ -9,6 +9,7 @@
     "label": "Search the catalog",
     "resultsCount": "{count} results",
     "noResults": "No results for \"{query}\".",
+    "noResultsFiltered": "No results match the selected filters.",
     "clear": "Clear search",
     "clearFilters": "Clear filters",
     "typeFilter": "Filter by type",

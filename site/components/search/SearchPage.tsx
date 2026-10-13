@@ -9,10 +9,11 @@ import { useCatalogSearch } from "./useCatalogSearch";
 
 interface SearchPageProps {
   plugins: string[];
+  repo: string;
   marketplaceName: string;
 }
 
-export function SearchPage({ plugins, marketplaceName }: SearchPageProps) {
+export function SearchPage({ plugins, repo, marketplaceName }: SearchPageProps) {
   const search = useCatalogSearch();
   const filtersActive = search.types.length > 0 || Boolean(search.plugin);
 
@@ -31,6 +32,7 @@ export function SearchPage({ plugins, marketplaceName }: SearchPageProps) {
           results={search.results}
           query={search.query}
           filtersActive={filtersActive}
+          repo={repo}
           marketplaceName={marketplaceName}
           onClearFilters={search.clearFilters}
         />
