@@ -1,0 +1,11 @@
+{
+  "name": "alpha",
+  "displayName": "Alpha Plugin",
+  "version": "1.2.3",
+  "description": "Alpha plugin",
+  "author": { "name": "Tester" },
+  "repository": "https://github.com/Owner/repo",
+  "license": "MIT",
+  "keywords": ["two", "three"],
+  "dependencies": ["gamma", { "name": "delta", "marketplace": "other-market" }]
+}
