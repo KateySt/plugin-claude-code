@@ -114,9 +114,10 @@ function loadSkills(ctx: Ctx): Artifact[] {
   const dir = path.join(ctx.pluginDir, "skills");
   return listDir(dir)
     .filter((e) => e.isDirectory())
-    .map((e) => ({ name: e.name, file: path.join(dir, e.name, "SKILL.md") }))
-    .filter(({ file }) => fs.existsSync(file))
-    .map(({ name, file }) => {
+    .map((e) => {
+      const name = e.name;
+      const file = path.join(dir, name, "SKILL.md");
+      if (!fs.existsSync(file)) throw new CatalogError(path.join(dir, name), "missing SKILL.md");
       const { data, body } = parseMarkdown(file);
       const referenceOnly = data["user-invocable"] === false;
       return makeArtifact(ctx, "skill", name, {
@@ -158,7 +159,10 @@ function loadMarkdownDir(
 function loadKeyed(ctx: Ctx, file: string, wrapper: string, type: "hook" | "mcp"): Artifact[] {
   const json = readJsonIfExists(file);
   if (!json) return [];
-  const entries = (json[wrapper] ?? json) as Json;
+  const entries = json[wrapper] ?? json;
+  if (typeof entries !== "object" || entries === null || Array.isArray(entries)) {
+    throw new CatalogError(file, `"${wrapper}" must be an object`);
+  }
   return Object.keys(entries).map((key) =>
     makeArtifact(ctx, type, key, {
       title: key,
@@ -182,7 +186,12 @@ export function loadCatalog(repoRoot: string): Catalog {
     const name = str(raw.name);
     const source = str(raw.source);
     if (!name) throw new CatalogError(marketplaceFile, "plugin entry without `name`");
-    if (!source?.startsWith("./")) continue; // only relative sources are loadable
+    if (!source?.startsWith("./")) {
+      throw new CatalogError(
+        marketplaceFile,
+        `Plugin "${name}": only relative ./ sources are supported`,
+      );
+    }
 
     const pluginDir = path.resolve(repoRoot, source);
     const manifestFile = path.join(pluginDir, ".claude-plugin", "plugin.json");
