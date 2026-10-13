@@ -159,7 +159,7 @@ function loadMarkdownDir(
 function loadKeyed(ctx: Ctx, file: string, wrapper: string, type: "hook" | "mcp"): Artifact[] {
   const json = readJsonIfExists(file);
   if (!json) return [];
-  const entries = json[wrapper] ?? json;
+  const entries = wrapper in json ? json[wrapper] : json;
   if (typeof entries !== "object" || entries === null || Array.isArray(entries)) {
     throw new CatalogError(file, `"${wrapper}" must be an object`);
   }

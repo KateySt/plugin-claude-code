@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { CatalogError, loadCatalog } from "@/lib/catalog/load";
 import { artifactUrl, githubBlobUrl, githubTreeUrl, pluginUrl } from "@/lib/catalog/urls";
 
@@ -120,8 +120,13 @@ describe("loadCatalog (real repo)", () => {
 });
 
 describe("loadCatalog (fail loudly)", () => {
+  const temps: string[] = [];
+  afterEach(() => {
+    for (const dir of temps.splice(0)) fs.rmSync(dir, { recursive: true, force: true });
+  });
   function tempRepo(mutate: (root: string) => void): string {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), "catalog-"));
+    temps.push(root);
     fs.cpSync(path.join(fixtures, "repo"), root, { recursive: true });
     mutate(root);
     return root;
@@ -165,6 +170,17 @@ describe("loadCatalog (fail loudly)", () => {
       fs.writeFileSync(alpha(r, ".mcp.json"), JSON.stringify({ mcpServers: "nope" })),
     );
     expectError(root, "plugins/alpha/.mcp.json");
+  });
+
+  it("rejects null hooks and mcpServers wrappers", () => {
+    const hooks = tempRepo((r) =>
+      fs.writeFileSync(alpha(r, "hooks", "hooks.json"), JSON.stringify({ hooks: null })),
+    );
+    expectError(hooks, "plugins/alpha/hooks/hooks.json");
+    const mcp = tempRepo((r) =>
+      fs.writeFileSync(alpha(r, ".mcp.json"), JSON.stringify({ mcpServers: null })),
+    );
+    expectError(mcp, "plugins/alpha/.mcp.json");
   });
 
   it("rejects invalid plugin.json", () => {
