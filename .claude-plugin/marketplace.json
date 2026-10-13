@@ -1,0 +1,17 @@
+{
+  "name": "kateyst-plugins",
+  "description": "Plugins for setting up and maintaining repositories for agentic AI development",
+  "owner": {
+    "name": "KateySt",
+    "url": "https://github.com/KateySt"
+  },
+  "plugins": [
+    {
+      "name": "agent-harness",
+      "source": "./plugins/agent-harness",
+      "description": "Generate and audit AGENTS.md + CLAUDE.md for new, legacy, and AI-ready projects, with every audit suggestion backed by a verified source",
+      "category": "productivity",
+      "tags": ["agents-md", "claude-md", "context", "setup", "audit"]
+    }
+  ]
+}

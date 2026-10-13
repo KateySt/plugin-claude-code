@@ -1,0 +1,13 @@
+{
+  "name": "agent-harness",
+  "displayName": "Agent Harness",
+  "version": "0.1.0",
+  "description": "Set up AGENTS.md (shared by Claude Code, Cursor, Codex, Copilot, Gemini) with a thin CLAUDE.md import, and audit existing agent setups with evidence-backed suggestions",
+  "author": {
+    "name": "KateySt",
+    "url": "https://github.com/KateySt"
+  },
+  "repository": "https://github.com/KateySt/plugin-claude-code",
+  "license": "MIT",
+  "keywords": ["agents-md", "claude-md", "context-engineering", "setup", "audit"]
+}
