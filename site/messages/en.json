@@ -60,12 +60,29 @@
       "mcp": "MCP server",
       "reference": "Reference",
       "manual": "Manual"
-    }
+    },
+    "hooks": "Hooks",
+    "mcps": "MCP servers",
+    "commands": "Commands",
+    "pageTitle": "{title} · {marketplace}"
   },
   "artifact": {
     "description": "Description",
     "source": "Source",
-    "viewOnGithub": "View on GitHub"
+    "viewOnGithub": "View on GitHub",
+    "viewSource": "View source",
+    "backToCatalog": "Back to the catalog",
+    "partOf": "Part of",
+    "referenceNote": "This skill is loaded by other skills, not typed by users.",
+    "manualNote": "Runs only when you invoke it; Claude does not start it on its own.",
+    "dependencies": "Dependencies",
+    "dependencyFrom": "{name} (from {marketplace})",
+    "category": "Category",
+    "readme": "README",
+    "argumentHint": "Argument hint",
+    "tools": "Tools",
+    "model": "Model",
+    "metadata": "Details"
   },
   "notFound": {
     "title": "Page not found",
