@@ -25,6 +25,7 @@ Makes `AGENTS.md` the single source of truth for every agent tool (Claude Code, 
 |---|---|
 | `/agent-harness:setup` | Empty new project, or existing code with no agent context. Interviews you (greenfield) or analyzes the repo (legacy), drafts the files, writes only after approval. |
 | `/agent-harness:audit` | Project already has AGENTS.md/CLAUDE.md. Runs local checks, researches each finding on the live web, verifies every citation, and lets you pick which numbered suggestions to apply. |
+| `/agent-harness:learnings [wrap-up\|review]` | `wrap-up` at the end of a session: saves non-obvious lessons (dead ends, gotchas, recurring errors) to `LEARNINGS.md` after you approve the diff. `review` from time to time: promotes repeated lessons into AGENTS.md, path-scoped `.claude/rules/`, skills, or hooks, and deletes stale ones. |
 
 Inside the plugin:
 
@@ -34,12 +35,27 @@ plugins/agent-harness/
 ├── skills/
 │   ├── setup/                 user-invoked: generate AGENTS.md + CLAUDE.md
 │   ├── audit/                 user-invoked: evidence-backed audit
+│   ├── learnings/             capture session lessons, promote repeated ones
 │   └── agents-md-standards/   shared rules with sources (loaded by the others)
 └── agents/
     ├── repo-analyzer.md       read-only repo scan
     ├── evidence-researcher.md web research per topic, quotes + URLs
     └── citation-verifier.md   re-fetches every source, rejects unsupported claims
 ```
+
+### sdd-engineering
+
+Spec-driven development: a feature goes spec → research → plan → tests → implementation → architecture review → verification, each stage run by its own subagent, with EARS acceptance criteria and AC → task → test traceability. Installs `superpowers` (from `claude-plugins-official`) as a dependency.
+
+```bash
+claude plugin install sdd-engineering@kateyst-plugins
+```
+
+| Command | When |
+|---|---|
+| `/sdd-engineering:sdd <feature request>` | A feature that spans several files or has fuzzy requirements. Interviews you, writes the spec, stops for your approval of the spec and the plan, then runs tests-first implementation and independent verification. Resumes from `specs/<NNN>-<slug>/`. |
+
+Details: [plugins/sdd-engineering/README.md](plugins/sdd-engineering/README.md).
 
 ## Develop
 
