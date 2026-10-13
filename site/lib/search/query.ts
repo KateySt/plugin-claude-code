@@ -10,7 +10,7 @@ export function cleanQuery(raw: string): { terms: string; typeFilter?: ArtifactT
   const kept: string[] = [];
   let typeFilter: ArtifactType | undefined;
   for (const rawToken of tokens) {
-    const token = rawToken.replace(/^[^p{L}p{N}]+|[^p{L}p{N}]+$/gu, "");
+    const token = rawToken.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, "");
     if (!token) continue;
     if (STOPWORDS.has(token)) continue;
     const type = TYPE_WORDS[token];
