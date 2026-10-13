@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Catalog site
 
-## Getting Started
+Static Next.js 16 site (GitHub Pages) that lists the plugins, skills, agents, and commands in this marketplace. It reads `.claude-plugin/marketplace.json` and `plugins/` at build time; nothing is fetched at runtime.
 
-First, run the development server:
+## Commands
+
+Run from `site/`:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm ci
+npm run dev             # local dev server
+npm run lint && npm run typecheck && npm test
+npm run build           # static export to out/
+npm run postbuild:check # fail if a root-relative href/src lacks the base path
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Base path
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`PAGES_BASE_PATH` sets the base path (default empty). CI uses `/plugin-claude-code`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+MSYS_NO_PATHCONV=1 PAGES_BASE_PATH=/plugin-claude-code npm run build && npm run postbuild:check
+```
 
-## Learn More
+`NEXT_PUBLIC_BASE_PATH` mirrors it for client-side `fetch`. User-visible strings live in `messages/en.json`.
 
-To learn more about Next.js, take a look at the following resources:
+## Deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`.github/workflows/pages.yml` builds and deploys on pushes to `main` that touch `site/`, `plugins/`, or `.claude-plugin/`, after a successful "Release plugin" run, and on manual dispatch. One-time setup: repo Settings, Pages, Source: GitHub Actions.

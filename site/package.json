@@ -7,7 +7,8 @@
     "build": "next build",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "postbuild:check": "node scripts/check-base-path.mjs out /plugin-claude-code"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
