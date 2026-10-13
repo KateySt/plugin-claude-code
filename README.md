@@ -25,6 +25,7 @@ Makes `AGENTS.md` the single source of truth for every agent tool (Claude Code, 
 |---|---|
 | `/agent-harness:setup` | Empty new project, or existing code with no agent context. Interviews you (greenfield) or analyzes the repo (legacy), drafts the files, writes only after approval. |
 | `/agent-harness:audit` | Project already has AGENTS.md/CLAUDE.md. Runs local checks, researches each finding on the live web, verifies every citation, and lets you pick which numbered suggestions to apply. |
+| `/agent-harness:learnings [wrap-up\|review]` | `wrap-up` at the end of a session: saves non-obvious lessons (dead ends, gotchas, recurring errors) to `LEARNINGS.md` after you approve the diff. `review` from time to time: promotes repeated lessons into AGENTS.md, path-scoped `.claude/rules/`, skills, or hooks, and deletes stale ones. |
 
 Inside the plugin:
 
@@ -34,6 +35,7 @@ plugins/agent-harness/
 ├── skills/
 │   ├── setup/                 user-invoked: generate AGENTS.md + CLAUDE.md
 │   ├── audit/                 user-invoked: evidence-backed audit
+│   ├── learnings/             capture session lessons, promote repeated ones
 │   └── agents-md-standards/   shared rules with sources (loaded by the others)
 └── agents/
     ├── repo-analyzer.md       read-only repo scan
