@@ -23,7 +23,17 @@
     "add": "Add to bundle",
     "remove": "Remove from bundle",
     "empty": "Your bundle is empty.",
-    "download": "Download bundle"
+    "download": "Download bundle",
+    "pageTitle": "Build a team bundle",
+    "pageIntro": "Pick plugins to share with your team. The result is a project settings snippet and the matching CLI commands.",
+    "selectHeading": "Choose plugins",
+    "save": "Save as my bundle",
+    "unknown": "Ignored unknown plugins from the link: {names}",
+    "settingsHeading": ".claude/settings.json",
+    "copySettings": "Copy settings",
+    "commandsHeading": "CLI commands",
+    "copyCommands": "Copy commands",
+    "trustNote": "Teammates get the plugins after they trust the project folder."
   },
   "catalog": {
     "heading": "Catalog",
