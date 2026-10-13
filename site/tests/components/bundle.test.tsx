@@ -1,6 +1,7 @@
 import path from "node:path";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { StrictMode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { BundleChecklist } from "@/components/bundle/BundleChecklist";
 import { BundleOutput } from "@/components/bundle/BundleOutput";
@@ -10,9 +11,10 @@ import { loadCatalog } from "@/lib/catalog/load";
 import { t } from "@/lib/i18n";
 
 let search = "";
+let pathname = "/bundle/";
 vi.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams(window.location.search || search),
-  usePathname: () => "/bundle/",
+  usePathname: () => pathname,
 }));
 
 const source = bundleSourceFrom(loadCatalog(path.resolve(__dirname, "../../..")));
@@ -39,6 +41,7 @@ function renderBundle() {
 
 beforeEach(() => {
   search = "";
+  pathname = "/bundle/";
   window.history.replaceState(null, "", "/bundle/");
   localStorage.clear();
   window.history.replaceState(null, "", "/bundle/");
@@ -117,9 +120,51 @@ describe("bundle", () => {
     expect(JSON.parse(localStorage.getItem(KEY)!)).toEqual(["sdd-engineering"]);
   });
 
-  it("malformed stored JSON gives an empty bundle", async () => {
+  it("malformed stored JSON is ignored and later edits overwrite it", async () => {
+    const user = userEvent.setup();
     localStorage.setItem(KEY, "{not json");
     renderBundle();
     await waitFor(() => expect(screen.getByText(t("bundle.empty"))).toBeInTheDocument());
+    await user.click(screen.getByRole("checkbox", { name: "agent-harness" }));
+    expect(JSON.parse(localStorage.getItem(KEY)!)).toEqual(["agent-harness"]);
+  });
+
+  it("is pure under StrictMode: one toggle, exact storage and URL, no console.error", async () => {
+    const user = userEvent.setup();
+    const errors = vi.spyOn(console, "error").mockImplementation(() => {});
+    render(
+      <StrictMode>
+        <BundleProvider source={source}>
+          <BundleChecklist />
+          <BundleOutput />
+        </BundleProvider>
+      </StrictMode>,
+    );
+    await user.click(screen.getByRole("checkbox", { name: "agent-harness" }));
+    expect(JSON.parse(localStorage.getItem(KEY)!)).toEqual(["agent-harness"]);
+    expect(window.location.search).toBe("?plugins=agent-harness");
+    expect(errors).not.toHaveBeenCalled();
+    errors.mockRestore();
+  });
+
+  it("keeps mirroring to the URL after leaving and re-entering /bundle/", async () => {
+    const user = userEvent.setup();
+    const ui = () => (
+      <BundleProvider source={source}>
+        <BundleChecklist />
+      </BundleProvider>
+    );
+    window.history.replaceState(null, "", "/bundle/?plugins=sdd-engineering");
+    const { rerender } = render(ui());
+    await user.click(await screen.findByRole("checkbox", { name: "agent-harness" }));
+    expect(window.location.search).toBe("?plugins=agent-harness,sdd-engineering");
+    pathname = "/";
+    window.history.replaceState(null, "", "/");
+    rerender(ui());
+    pathname = "/bundle/";
+    window.history.replaceState(null, "", "/bundle/?plugins=agent-harness,sdd-engineering");
+    rerender(ui());
+    await user.click(await screen.findByRole("checkbox", { name: "sdd-engineering" }));
+    expect(window.location.search).toBe("?plugins=agent-harness");
   });
 });

@@ -64,11 +64,11 @@ interface InitState {
 function UrlInit({
   known,
   onInit,
-  written,
+  writtenRef,
 }: {
   known: string[];
   onInit: (state: InitState) => void;
-  written: { current: string | null | undefined };
+  writtenRef: { current: string | null | undefined };
 }) {
   const params = useSearchParams();
   const pathname = usePathname();
@@ -76,8 +76,9 @@ function UrlInit({
   const onBundlePage = pathname.replace(/\/+$/, "").endsWith("/bundle");
 
   useEffect(() => {
-    // The URL change was written by toggle; local state is already current.
-    if (onBundlePage && param === written.current) return;
+    if (!onBundlePage) writtenRef.current = undefined;
+    // The URL change was writtenRef by toggle; local state is already current.
+    if (onBundlePage && param === writtenRef.current) return;
     if (onBundlePage && param !== null) {
       const { plugins, unknown } = parseBundleParam(param, known);
       onInit({ plugins, fromUrl: true, unknown, onBundlePage });
@@ -89,7 +90,7 @@ function UrlInit({
         onBundlePage,
       });
     }
-  }, [onBundlePage, param, known, onInit, written]);
+  }, [onBundlePage, param, known, onInit, writtenRef]);
 
   return null;
 }
@@ -107,14 +108,19 @@ export function BundleProvider({
     unknown: [],
     onBundlePage: false,
   });
-  const written = useRef<string | null | undefined>(undefined);
+  const latest = useRef(state);
+  const applyInit = useCallback((next: InitState) => {
+    latest.current = next;
+    setState(next);
+  }, []);
+  const writtenRef = useRef<string | null | undefined>(undefined);
   const known = useMemo(() => source.plugins.map((p) => p.name), [source]);
 
   const commit = useCallback((plugins: string[], onBundlePage: boolean) => {
     writeStorage(plugins);
     if (onBundlePage) {
       const query = serializeBundleParam(plugins);
-      written.current = query;
+      writtenRef.current = query;
       const url = `${window.location.pathname}?plugins=${query}`;
       window.history.replaceState(window.history.state, "", url);
     }
@@ -122,21 +128,24 @@ export function BundleProvider({
 
   const toggle = useCallback(
     (name: string) => {
-      setState((s) => {
-        const plugins = s.plugins.includes(name)
-          ? s.plugins.filter((n) => n !== name)
-          : [...s.plugins, name].sort();
-        commit(plugins, s.onBundlePage);
-        return { ...s, plugins, fromUrl: false };
-      });
+      const s = latest.current;
+      const plugins = s.plugins.includes(name)
+        ? s.plugins.filter((n) => n !== name)
+        : [...s.plugins, name].sort();
+      const next = { ...s, plugins, fromUrl: false };
+      latest.current = next;
+      setState(next);
+      commit(plugins, s.onBundlePage);
     },
     [commit],
   );
 
   const save = useCallback(() => {
-    writeStorage(state.plugins);
-    setState((s) => ({ ...s, fromUrl: false }));
-  }, [state.plugins]);
+    const next = { ...latest.current, fromUrl: false };
+    latest.current = next;
+    writeStorage(next.plugins);
+    setState(next);
+  }, []);
 
   const value = useMemo<BundleContextValue>(
     () => ({
@@ -154,7 +163,7 @@ export function BundleProvider({
   return (
     <BundleContext value={value}>
       <Suspense fallback={null}>
-        <UrlInit known={known} onInit={setState} written={written} />
+        <UrlInit known={known} onInit={applyInit} writtenRef={writtenRef} />
       </Suspense>
       {children}
     </BundleContext>
