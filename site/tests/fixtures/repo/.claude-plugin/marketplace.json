@@ -1,0 +1,9 @@
+{
+  "name": "fixture-market",
+  "description": "Fixture marketplace",
+  "owner": { "name": "Tester" },
+  "plugins": [
+    { "name": "alpha", "source": "./plugins/alpha", "description": "Alpha plugin", "category": "development", "tags": ["one", "two"] },
+    { "name": "bare", "source": "./plugins/bare", "description": "Bare plugin" }
+  ]
+}

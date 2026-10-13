@@ -1,16 +1,18 @@
 # kateyst-plugins
 
-Claude Code plugin marketplace. No build step; everything is Markdown and JSON.
+Claude Code plugin marketplace. No build step for plugins (Markdown and JSON); the catalog site in `site/` builds with Next.js.
 
 ## Commands
 
 - Validate everything: `claude plugin validate --strict .`
 - Validate one plugin: `claude plugin validate --strict ./plugins/<name>`
+- Site (from repo root): `cd site && npm ci && npm test && npm run build`
 - Local install test: `claude plugin marketplace add ./` then `claude plugin install <name>@kateyst-plugins`
 
 ## Map
 
 - `.claude-plugin/marketplace.json` — catalog; every plugin needs an entry here.
+- `site/` — GitHub Pages catalog (Next.js static export).
 - `plugins/<name>/` — one plugin each; manifest in `.claude-plugin/plugin.json`, everything else at the plugin root.
 
 ## Conventions

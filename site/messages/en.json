@@ -1,0 +1,93 @@
+{
+  "site": {
+    "title": "Kateyst Plugins",
+    "tagline": "A catalog of Claude Code plugins, skills, and agents.",
+    "github": "GitHub"
+  },
+  "search": {
+    "placeholder": "Search plugins, skills, and agents",
+    "label": "Search the catalog",
+    "resultsCount": "{count} results",
+    "noResults": "No results for \"{query}\".",
+    "noResultsFiltered": "No results match the selected filters.",
+    "clear": "Clear search",
+    "clearFilters": "Clear filters",
+    "typeFilter": "Filter by type",
+    "pluginFilter": "Plugin",
+    "allPlugins": "All plugins",
+    "loading": "Loading the catalog...",
+    "error": "The catalog could not be loaded. Reload the page to try again."
+  },
+  "install": {
+    "heading": "Install",
+    "addMarketplace": "Add the marketplace",
+    "installPlugin": "Install the plugin",
+    "copy": "Copy",
+    "copied": "Copied",
+    "tabCli": "Terminal",
+    "tabSession": "In session",
+    "addMarketplaceHeading": "Add this marketplace",
+    "copyInstall": "Copy install command"
+  },
+  "bundle": {
+    "heading": "Bundle",
+    "add": "Add to bundle",
+    "remove": "Remove from bundle",
+    "empty": "Your bundle is empty.",
+    "download": "Download bundle",
+    "pageTitle": "Build a team bundle",
+    "pageIntro": "Pick plugins to share with your team. The result is a project settings snippet and the matching CLI commands.",
+    "selectHeading": "Choose plugins",
+    "save": "Save as my bundle",
+    "unknown": "Ignored unknown plugins from the link: {names}",
+    "settingsHeading": ".claude/settings.json",
+    "copySettings": "Copy settings",
+    "commandsHeading": "CLI commands",
+    "copyCommands": "Copy commands",
+    "trustNote": "Teammates get the plugins after they trust the project folder."
+  },
+  "catalog": {
+    "heading": "Catalog",
+    "plugins": "Plugins",
+    "skills": "Skills",
+    "agents": "Agents",
+    "version": "Version {version}",
+    "badge": {
+      "plugin": "Plugin",
+      "skill": "Skill",
+      "agent": "Agent",
+      "command": "Command",
+      "hook": "Hook",
+      "mcp": "MCP server",
+      "reference": "Reference",
+      "manual": "Manual only"
+    },
+    "hooks": "Hooks",
+    "mcps": "MCP servers",
+    "commands": "Commands",
+    "pageTitle": "{title} · {marketplace}"
+  },
+  "artifact": {
+    "description": "Description",
+    "source": "Source",
+    "viewOnGithub": "View on GitHub",
+    "viewSource": "View source",
+    "backToCatalog": "Back to the catalog",
+    "partOf": "Part of",
+    "referenceNote": "This skill is loaded by other skills, not typed by users.",
+    "manualNote": "Runs only when you invoke it; Claude does not start it on its own.",
+    "dependencies": "Dependencies",
+    "dependencyFrom": "{name} (from {marketplace})",
+    "category": "Category",
+    "readme": "README",
+    "argumentHint": "Argument hint",
+    "tools": "Tools",
+    "model": "Model",
+    "metadata": "Details"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The page you are looking for does not exist.",
+    "backHome": "Back to the catalog"
+  }
+}

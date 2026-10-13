@@ -2,6 +2,8 @@
 
 A Claude Code plugin marketplace for setting up repositories for agentic AI development.
 
+Browse the catalog: <https://kateyst.github.io/plugin-claude-code/>
+
 ## Install
 
 ```bash
@@ -11,7 +13,7 @@ claude plugin install agent-harness@kateyst-plugins
 
 Or inside a session: `/plugin marketplace add KateySt/plugin-claude-code`, then `/plugin install agent-harness@kateyst-plugins`.
 
-Private repository: Claude Code clones with your existing git credentials and never prompts. Either have an SSH key loaded in `ssh-agent`, or run `gh auth login && gh auth setup-git`. Without a GitHub SSH key, set `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1`.
+Without a GitHub SSH key, set `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1`.
 
 Updates: auto-update is off by default. Turn it on in `/plugin` → Marketplaces → kateyst-plugins → Enable auto-update, or run `claude plugin update agent-harness@kateyst-plugins`.
 
