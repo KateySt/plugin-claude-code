@@ -1,0 +1,43 @@
+{
+  "site": {
+    "title": "Kateyst Plugins",
+    "tagline": "A catalog of Claude Code plugins, skills, and agents."
+  },
+  "search": {
+    "placeholder": "Search plugins, skills, and agents",
+    "label": "Search the catalog",
+    "resultsCount": "{count} results",
+    "noResults": "No results for \"{query}\"."
+  },
+  "install": {
+    "heading": "Install",
+    "addMarketplace": "Add the marketplace",
+    "installPlugin": "Install the plugin",
+    "copy": "Copy",
+    "copied": "Copied"
+  },
+  "bundle": {
+    "heading": "Bundle",
+    "add": "Add to bundle",
+    "remove": "Remove from bundle",
+    "empty": "Your bundle is empty.",
+    "download": "Download bundle"
+  },
+  "catalog": {
+    "heading": "Catalog",
+    "plugins": "Plugins",
+    "skills": "Skills",
+    "agents": "Agents",
+    "version": "Version {version}"
+  },
+  "artifact": {
+    "description": "Description",
+    "source": "Source",
+    "viewOnGithub": "View on GitHub"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The page you are looking for does not exist.",
+    "backHome": "Back to the catalog"
+  }
+}
