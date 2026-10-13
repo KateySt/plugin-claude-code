@@ -41,6 +41,20 @@ plugins/agent-harness/
     └── citation-verifier.md   re-fetches every source, rejects unsupported claims
 ```
 
+### sdd-engineering
+
+Spec-driven development: a feature goes spec → research → plan → tests → implementation → architecture review → verification, each stage run by its own subagent, with EARS acceptance criteria and AC → task → test traceability. Installs `superpowers` (from `claude-plugins-official`) as a dependency.
+
+```bash
+claude plugin install sdd-engineering@kateyst-plugins
+```
+
+| Command | When |
+|---|---|
+| `/sdd-engineering:sdd <feature request>` | A feature that spans several files or has fuzzy requirements. Interviews you, writes the spec, stops for your approval of the spec and the plan, then runs tests-first implementation and independent verification. Resumes from `specs/<NNN>-<slug>/`. |
+
+Details: [plugins/sdd-engineering/README.md](plugins/sdd-engineering/README.md).
+
 ## Develop
 
 ```bash

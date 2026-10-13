@@ -20,3 +20,8 @@ jobs:
           for dir in plugins/*/; do
             npx -y @anthropic-ai/claude-code plugin validate --strict "$dir"
           done
+      - name: Forbid local paths in plugins
+        run: |
+          if grep -rnE 'C:\\|/Users/|/home/|DevDigest' plugins/; then
+            echo "::error::Local paths or DevDigest references found in plugins/"; exit 1
+          fi
