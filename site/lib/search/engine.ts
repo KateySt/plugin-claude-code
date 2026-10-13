@@ -17,7 +17,10 @@ const TYPE_ORDER: Record<ArtifactType, number> = {
 };
 
 function compareDocs(a: SearchDoc, b: SearchDoc): number {
+  const aPlugin = a.type === "plugin" ? 0 : 1;
+  const bPlugin = b.type === "plugin" ? 0 : 1;
   return (
+    aPlugin - bPlugin ||
     a.plugin.localeCompare(b.plugin) ||
     TYPE_ORDER[a.type] - TYPE_ORDER[b.type] ||
     a.name.localeCompare(b.name)

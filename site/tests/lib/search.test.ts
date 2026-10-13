@@ -13,6 +13,12 @@ describe("cleanQuery", () => {
     expect(cleanQuery("I need a skill")).toEqual({ terms: "", typeFilter: "skill" });
     expect(cleanQuery("agent")).toEqual({ terms: "", typeFilter: "agent" });
   });
+  it("strips edge punctuation but keeps inner dots and hyphens", () => {
+    expect(cleanQuery("I need a skill.")).toEqual({ terms: "", typeFilter: "skill" });
+    expect(cleanQuery("agents.md?")).toEqual({ terms: "agents.md" });
+    expect(cleanQuery("spec-driven!")).toEqual({ terms: "spec-driven" });
+    expect(cleanQuery("?!")).toEqual({ terms: "" });
+  });
   it("normalizes whitespace and case", () => {
     expect(cleanQuery("  Spec   Driven ")).toEqual({ terms: "spec driven" });
   });
@@ -41,7 +47,11 @@ describe("search over the real catalog", () => {
   });
   it("lists all docs passing filters for an empty query", () => {
     expect(search("", { types: ["agent"], plugin: "sdd-engineering" }).length).toBe(7);
-    expect(search("", { types: [] })[0].type).toBe("plugin");
+    const all = search("", { types: [] });
+    const n = catalog.plugins.length;
+    expect(n).toBeGreaterThan(1);
+    expect(all.slice(0, n).every((d) => d.type === "plugin")).toBe(true);
+    expect(all.slice(n).some((d) => d.type === "plugin")).toBe(false);
   });
   it("tolerates typos", () => {
     expect(search("spec drivn", { types: [] }).some((r) => r.plugin === "sdd-engineering")).toBe(true);
