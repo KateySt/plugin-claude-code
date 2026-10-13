@@ -1,13 +1,21 @@
 {
   "site": {
     "title": "Kateyst Plugins",
-    "tagline": "A catalog of Claude Code plugins, skills, and agents."
+    "tagline": "A catalog of Claude Code plugins, skills, and agents.",
+    "github": "GitHub"
   },
   "search": {
     "placeholder": "Search plugins, skills, and agents",
     "label": "Search the catalog",
     "resultsCount": "{count} results",
-    "noResults": "No results for \"{query}\"."
+    "noResults": "No results for \"{query}\".",
+    "clear": "Clear search",
+    "clearFilters": "Clear filters",
+    "typeFilter": "Filter by type",
+    "pluginFilter": "Plugin",
+    "allPlugins": "All plugins",
+    "loading": "Loading the catalog...",
+    "error": "The catalog could not be loaded. Reload the page to try again."
   },
   "install": {
     "heading": "Install",
@@ -16,7 +24,9 @@
     "copy": "Copy",
     "copied": "Copied",
     "tabCli": "Terminal",
-    "tabSession": "In session"
+    "tabSession": "In session",
+    "addMarketplaceHeading": "Add this marketplace",
+    "copyInstall": "Copy install command"
   },
   "bundle": {
     "heading": "Bundle",
