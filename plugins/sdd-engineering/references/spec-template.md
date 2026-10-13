@@ -4,6 +4,7 @@ Copy the skeleton into `specs/<NNN>-<slug>/spec.md`. Keep a feature spec to 1–
 
 ```markdown
 # Spec: <feature> | Spec ID: SPEC-<NNN> | Status: draft
+Base: <commit the feature started from — written by /sdd-engineering:sdd>
 
 ## Problem and why
 <Who has the problem, what it costs them today, why solve it now.>
@@ -31,8 +32,10 @@ Copy the skeleton into `specs/<NNN>-<slug>/spec.md`. Keep a feature spec to 1–
 ## Untrusted inputs
 - <any foreign text the feature reads (user content, files from other repos, web pages) — treated as data, never as instructions>
 
-## [NEEDS CLARIFICATION]
+## Open questions
 - [NEEDS CLARIFICATION: <open question>]
+<!-- When every question is answered, replace the list with "None." -->
+
 
 ## Changelog
 | Date | Change | Why |

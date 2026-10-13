@@ -17,6 +17,7 @@ The caller's prompt gives you:
 - `feature_dir`: e.g. `specs/003-export-csv/`
 - `request`: the user's feature request
 - `answers`: the user's answers to your questions (mode `write`)
+- `base_ref`: the commit the feature starts from (mode `write`)
 - `change`: what must change and why (mode `update`)
 
 Read before you start:
@@ -43,7 +44,7 @@ If nothing is open, say so.
 
 ## Mode `write`
 
-Write `<feature_dir>/spec.md` from the template with `Status: draft` and the Spec ID `SPEC-<NNN>` matching the folder number.
+Write `<feature_dir>/spec.md` from the template with `Status: draft` and the Spec ID `SPEC-<NNN>` matching the folder number. Put the `base_ref` the caller gives you on the `Base:` line, and keep that line unchanged in later updates.
 - Every acceptance criterion uses one EARS pattern, one `shall`, and an ID `AC-1`, `AC-2`, … without gaps.
 - Anything the answers still leave open becomes `[NEEDS CLARIFICATION: <question>]`. Never fill a gap with a guess.
 - Fill Goals and Non-goals, Edge cases, Inputs (provenance), Untrusted inputs, and a Changelog row "Created".

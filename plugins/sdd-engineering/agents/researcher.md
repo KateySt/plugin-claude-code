@@ -19,7 +19,7 @@ The caller's prompt gives you `feature_dir`. Read `<feature_dir>/spec.md` first;
 For each acceptance criterion, find:
 1. **Where it lands:** files, modules, functions, routes, or components the change will touch or extend.
 2. **Existing patterns:** how similar behavior is already done here (naming, error handling, data access), so the plan follows them.
-3. **Tests:** the test framework, the command that runs tests, where tests live, and one existing test to copy the style from.
+3. **Tests:** the test framework, the command that runs tests, where tests live, and one existing test to copy the style from. Give a glob that matches test files only. This matters when tests sit next to source files (`*.test.ts`, `*_test.go`): test-writer may read only files matching it. If the project has no test framework, write `Framework: none` exactly. Don't guess one.
 4. **Constraints:** relevant decisions in `docs/` (architecture, ADRs), rules in `AGENTS.md`/`CLAUDE.md`, config limits, dependencies and their versions.
 5. **Risks:** code with no tests, shared code with many callers, anything that contradicts the spec.
 
@@ -37,9 +37,11 @@ Write only `<feature_dir>/research.md`:
 - <fact> (`path:line`)
 
 ## Test setup
-- Framework: <name> (`path:line`)
+- Framework: <name> (`path:line`) | Framework: none
 - Run all: `<command>` (`path:line`)
-- Test location and style example: `<path>`
+- Test dirs: `<dir>`[, `<dir>`]
+- Test files: `<glob matching only test files, e.g. tests/**/*.py, **/*.test.ts, **/*_test.go>`
+- Style example: `<path>`
 
 ## Constraints
 - <fact> (`path:line`)
@@ -55,4 +57,4 @@ Every fact cites `path:line`. Mark anything you inferred rather than read as `(i
 
 Reply with the research path and a five-line summary. End with exactly one status line:
 - `STATUS: DONE`
-- `STATUS: BLOCKED — <reason>` (for example, the spec contradicts the code in a way only the user can resolve)
+- `STATUS: BLOCKED — spec issue: <what>` when the spec contradicts the code in a way only the user can resolve

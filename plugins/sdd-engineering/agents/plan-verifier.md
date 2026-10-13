@@ -25,7 +25,7 @@ Don't edit code, tests, spec, or plan. The only file you write is `verification.
 
 ## How to verify
 
-For every AC in the spec (not only the ones the plan mentions):
+For every AC in the spec (not only the ones the plan mentions), except ACs struck through as `~~AC-n~~`:
 1. **Implementation:** find the code that implements it; cite `file:line`.
 2. **Test:** find the test whose name or AC comment names this AC; cite `file:line` and the test name.
 3. **Result:** run the test and record the result from the actual output.

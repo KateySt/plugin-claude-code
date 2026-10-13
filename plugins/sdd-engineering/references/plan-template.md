@@ -27,6 +27,8 @@ Line format: `- [ ] [P] T<n> <task> → AC-<n>[, AC-<m>] → <test name>`
 - `→ AC-…`: every task names at least one AC; every AC appears in at least one task.
 - `→ <test name>`: the test that proves the task; test-writer uses this name.
 - The checkbox is ticked by `implementer` when the task's tests pass.
+- `T0`: only when the project has no test framework. It sets one up (`- [ ] T0 Set up <framework>`), runs before any tests are written, and is the only task without an AC and a test name.
+- ACs struck through in the spec (`~~AC-n~~`) need no task.
 
 `Approved:` stays empty until the human approves the plan; `/sdd-engineering:sdd` then writes `Approved: <YYYY-MM-DD>`.
 
