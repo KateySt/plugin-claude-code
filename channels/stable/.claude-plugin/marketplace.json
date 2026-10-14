@@ -1,0 +1,23 @@
+{
+  "name": "kateyst-plugins-stable",
+  "description": "Stable channel of kateyst-plugins: each plugin is pinned to a release tag that passed its smoke eval",
+  "owner": {
+    "name": "KateySt",
+    "url": "https://github.com/KateySt"
+  },
+  "allowCrossMarketplaceDependenciesOn": ["claude-plugins-official"],
+  "plugins": [
+    {
+      "name": "sdd-engineering",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/KateySt/plugin-claude-code.git",
+        "path": "plugins/sdd-engineering",
+        "ref": "sdd-engineering--v1.0.0"
+      },
+      "description": "Spec-driven development: one /sdd skill runs spec, research, plan, tests, implementation, review and verification subagents, with EARS acceptance criteria and AC→task→test traceability",
+      "category": "development",
+      "tags": ["sdd", "spec-driven-development", "ears", "subagents", "testing"]
+    }
+  ]
+}

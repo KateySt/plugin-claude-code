@@ -6,12 +6,15 @@ Claude Code plugin marketplace. No build step for plugins (Markdown and JSON); t
 
 - Validate everything: `claude plugin validate --strict .`
 - Validate one plugin: `claude plugin validate --strict ./plugins/<name>`
+- Smoke eval (real model calls, costs money): `claude plugin eval ./plugins/<name> --tag smoke --ablation none --runs 1`
 - Site (from repo root): `cd site && npm ci && npm test && npm run build`
 - Local install test: `claude plugin marketplace add ./` then `claude plugin install <name>@kateyst-plugins`
 
 ## Map
 
 - `.claude-plugin/marketplace.json` — catalog; every plugin needs an entry here.
+- `channels/stable/.claude-plugin/marketplace.json` — stable channel (`kateyst-plugins-stable`); entries pin a `<plugin>--v<version>` tag via `ref`. Move a pin only after that tag's smoke eval passes.
+- `plugins/<name>/evals/` — `claude plugin eval` cases; `--tag smoke` is the release gate.
 - `site/` — GitHub Pages catalog (Next.js static export).
 - `plugins/<name>/` — one plugin each; manifest in `.claude-plugin/plugin.json`, everything else at the plugin root.
 

@@ -2,6 +2,10 @@ CLAUDE.local.md
 .claude/settings.local.json
 .env*
 
+# plugin eval output
+plugins/*/evals/results/
+evals/results/
+
 # catalog site
 site/node_modules
 site/.next
