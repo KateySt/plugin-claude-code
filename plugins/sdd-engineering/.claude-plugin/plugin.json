@@ -1,7 +1,7 @@
 {
   "name": "sdd-engineering",
   "displayName": "SDD Engineering",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Spec-driven development: one /sdd skill runs spec, research, plan, tests, implementation, review and verification subagents, with EARS acceptance criteria and AC→task→test traceability",
   "author": {
     "name": "KateySt",
@@ -9,8 +9,18 @@
   },
   "repository": "https://github.com/KateySt/plugin-claude-code",
   "license": "MIT",
-  "keywords": ["sdd", "spec-driven-development", "ears", "subagents", "planning", "testing"],
+  "keywords": [
+    "sdd",
+    "spec-driven-development",
+    "ears",
+    "subagents",
+    "planning",
+    "testing"
+  ],
   "dependencies": [
-    { "name": "superpowers", "marketplace": "claude-plugins-official" }
+    {
+      "name": "superpowers",
+      "marketplace": "claude-plugins-official"
+    }
   ]
 }
